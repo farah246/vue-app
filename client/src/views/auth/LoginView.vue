@@ -18,6 +18,29 @@
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import {reactive, ref} from 'vue'
+import {type LoginData, type RegisterData, useAuthStore} from "@/stores/auth";
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const authStore = useAuthStore()
+const loginData = reactive<LoginData>({
+  email: "",
+  password: '',
+})
+const errorMessage = ref<string>('')
+async function submit(){
+  await authStore.login(loginData)
+      .then(res=>{
+        if(res){
+          router.replace({name: 'user'})
+        }
+      }).catch(err=>{
+    errorMessage.value = err.response.data.message
+  })
+}
+</script>
+
 <style scoped>
 #login .card{
   max-width: 40vw;

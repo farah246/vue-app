@@ -22,6 +22,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+    console.log('login')
     const{email,password} = req.body;
     if(!email||!password){
         return res.status(422).json({message:"All fields are required"});
@@ -66,6 +67,7 @@ const logout = async (req, res) => {
 };
 
 async function refresh(req, res){
+    console.log('refresh')
     const cookies = req.cookies
     console.log(cookies.refreshToken)
     if(!cookies.refreshToken) return res.sendStatus(401)

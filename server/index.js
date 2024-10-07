@@ -19,7 +19,7 @@ app.use(credentials);
 app.use(cors(corsOptions));
 
 //application.x-www-form-urlencoded
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended:false}));
 
 //application/json response
 app.use(express.json());
@@ -33,7 +33,7 @@ app.use(authentication)
 
 //Default error handler
 app.use(errorHandler);
-const PORT = 3500;
+const PORT = 3600;
 
 //Routes
 app.use('/api/auth',authRouter);

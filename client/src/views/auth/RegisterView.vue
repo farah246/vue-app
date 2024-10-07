@@ -35,6 +35,35 @@
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import {reactive, ref} from 'vue'
+import { type RegisterData, useAuthStore} from "@/stores/auth";
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const authStore = useAuthStore()
+const registerData = reactive<RegisterData>({
+  username: '',
+  email: "",
+  password: '',
+  password_confirm: '',
+  first_name: '',
+  last_name: ''
+})
+const errorMessage = ref<string>('')
+async function submit(){
+  console.log('submitted')
+  await authStore.register(registerData)
+      .then(res=>{
+        if(res){
+          console.log('registered')
+          router.replace({name: 'login'})
+        }
+      }).catch(err=>{
+        console.log('err', err)
+        errorMessage.value = err.message
+      })
+}
+</script>
 <style scoped>
 #register .card{
   max-width: 40vw;
