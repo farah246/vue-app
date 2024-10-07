@@ -8,6 +8,7 @@ import {credentials} from "./middleware/credentials.js";
 import {errorHandler} from "./middleware/error_handler.js";
 import authRouter from './routes/api/auth.js';
 import mongoose from "mongoose";
+import authentication from "./middleware/authentication.js";
 connect();
 const app =express();
 
@@ -26,6 +27,7 @@ app.use(express.json());
 //middleware for cookies
 app.use(cookieParser());
 
+app.use(authentication)
 //static files
 //app.use('/static',express.static(path.join(__dirname,'public')));
 
