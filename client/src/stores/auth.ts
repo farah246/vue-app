@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {useApi} from '../composables/useApi'
+import {useApiPrivate, useApi} from '../composables/useApi'
 export interface User {
     id: number,
     username: string,
@@ -35,6 +35,15 @@ export const useAuthStore = defineStore('auth',{
         isAuthenticated: (state: State) => state.user?.id? true : false
     },
     actions : {
+        async attempt(){
+            try{
+                await this.refresh();
+                await this.getUser();
+            }catch(err){
+                return
+            }
+            return
+        },
         async login (payload: LoginData){
             try{
                 const {data} = await useApi().post('/api/auth/login',payload);
@@ -58,7 +67,7 @@ export const useAuthStore = defineStore('auth',{
         async getUser(){
             try{
                 console.log('get user')
-                const {data} = await useApi().get('/api/auth/user')
+                const {data} = await useApiPrivate().get('/api/auth/user')
                 this.$patch({
                     user: data as User
                 })
@@ -69,7 +78,7 @@ export const useAuthStore = defineStore('auth',{
         },
         async logout(){
             try{
-                const {data} = await useApi().post('/api/auth/logout')
+                const {data} = await useApiPrivate().post('/api/auth/logout')
                 this.$patch({
                     user: { id: 0, username: '', email: '', first_name: '', last_name: '' },
                     accessToken: ''

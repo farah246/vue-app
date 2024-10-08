@@ -1,11 +1,11 @@
-import {axiosInstance} from "@/utils/axios";
+import {axiosInstance,axiosInstancePrivate} from "@/utils/axios";
 import {useAuthStore} from "@/stores/auth.js";
 import {watchEffect} from "vue";
 
-export const useApi = () => {
+ export const useApiPrivate = () => {
     const authStore = useAuthStore();
     watchEffect(() =>{
-        axiosInstance.interceptors.request.use(
+        axiosInstancePrivate.interceptors.request.use(
             (config) => {
                 if(!config.headers['authorization']){
                     config.headers['authorization'] = `Bearer ${authStore.accessToken}`;
@@ -16,7 +16,7 @@ export const useApi = () => {
                 return Promise.reject(error);
             }
         );
-        axiosInstance.interceptors.response.use(
+        axiosInstancePrivate.interceptors.response.use(
             (response) => {
                 return response;
             },
@@ -27,7 +27,7 @@ export const useApi = () => {
                     try{
                         await authStore.refresh();
                         originalRequest.headers['authorization'] = authStore.accessToken;
-                        return axiosInstance(originalRequest);
+                        return axiosInstancePrivate(originalRequest);
                     }catch (error) {
                         return Promise.reject(error);
                     }
@@ -38,5 +38,8 @@ export const useApi = () => {
     })
 
 
-    return axiosInstance;
+    return axiosInstancePrivate;
+}
+export function useApi(){
+    return axiosInstance
 }

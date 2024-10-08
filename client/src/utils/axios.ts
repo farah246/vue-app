@@ -8,3 +8,10 @@ export  const axiosInstance = axios.create({
         'Content-Type': 'application/json',
     }
 });
+export  const axiosInstancePrivate = axios.create({
+    baseURL: import.meta.env.VITE_API_URI,
+    withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json',
+    }
+});

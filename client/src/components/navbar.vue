@@ -46,9 +46,7 @@ const isAuthenticated = computed (()=>{return authStore.isAuthenticated })
 const errorMessage = ref<string>('')
 async function logout (){
   await authStore.logout().then(res=>{
-    if(res){
       router.replace({name: 'home'})
-    }
   }).catch(err=>errorMessage.value=err.response.data.message)
 }
 </script>
